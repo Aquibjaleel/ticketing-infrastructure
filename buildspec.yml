@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.x
+    commands:
+      # 1. Install the official HashiCorp Terraform binary inside the AWS container
+      - echo "Installing Terraform..."
+      - wget https://releases.hashicorp.com/terraform/1.10.0/terraform_1.10.0_linux_amd64.zip
+      - unzip terraform_1.10.0_linux_amd64.zip
+      - mv terraform /usr/local/bin/
+      - terraform --version
+
+  pre_build:
+    commands:
+      # 2. Change directory to your environment orchestrator and initialize the S3 remote backend
+      - echo "Initializing Terraform Remote Backend..."
+      - cd env/dev
+      - terraform init
+
+  build:
+    commands:
+      # 3. Run validation and execution planning
+      - echo "Running Terraform Plan..."
+      - terraform validate
+      - terraform plan -no-color
+
+  post_build:
+    commands:
+      # 4. Apply the changes safely (Typically configured to run on merges to dev/main)
+      - echo "Deploying Infrastructure to AWS..."
+      - if [ "$CODEBUILD_BUILD_SUCCEEDING" = "1" ]; then terraform apply -auto-approve; fi
