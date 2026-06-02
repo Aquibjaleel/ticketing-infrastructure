@@ -1,0 +1,22 @@
+# Local terraform directories
+.terraform/
+*.ids
+*.json
+
+# State files (contain plain-text passwords, do not push!)
+*.tfstate
+*.tfstate.backup
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Exclude secrets
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+
+# Mac system files
+.DS_Store
+:
