@@ -1,6 +1,6 @@
 variable "bucket_name" {
   # Replace 'aquib-2026' with your name or random numbers to guarantee global uniqueness
-  default = "skillslab-tfstate-bucket-aquib-2026" 
+  default = "skillslab-tfstate-bucket-aquib-2026"
 }
 
 resource "aws_s3_bucket" "backend_storage" {

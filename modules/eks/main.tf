@@ -83,7 +83,7 @@ resource "aws_eks_node_group" "nodes" {
     max_size     = 2
     min_size     = 1
   }
-  ami_type       = "AL2023_x86_64_STANDARD" 
+  ami_type       = "AL2023_x86_64_STANDARD"
   instance_types = ["t3.small"]
 
   depends_on = [

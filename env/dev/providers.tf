@@ -7,11 +7,11 @@ terraform {
     }
   }
   #Optional: Uncomment this later once you have an S3 bucket to store your state file
-backend "s3" {
-  bucket         = "skillslab-tfstate-bucket-aquib-2026"
-  key            = "dev/infrastructure.tfstate"
-  region         = "us-east-1"
-}
+  backend "s3" {
+    bucket = "skillslab-tfstate-bucket-aquib-2026"
+    key    = "dev/infrastructure.tfstate"
+    region = "us-east-1"
+  }
 
 }
 
