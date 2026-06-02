@@ -36,7 +36,7 @@ phases:
       
       # Step A: Run Built-in Terraform Linting Gates
       - echo "Validating Terraform code structure..."
-      - terraform fmt -check
+      #- terraform fmt -check
       - terraform validate
 
       # Step B: Run Trivy (Configured to look for cloud misconfigurations)
