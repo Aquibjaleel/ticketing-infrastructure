@@ -30,4 +30,6 @@ resource "aws_dynamodb_table" "tfstate_lock" {
   }
 
   tags = { Environment = "dev" }
+
 }
+# checking triggering of terraform fmt
