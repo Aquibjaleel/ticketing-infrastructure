@@ -14,17 +14,19 @@ resource "aws_internet_gateway" "hub_igw" {
 }
 
 resource "aws_subnet" "public_a" {
-  vpc_id            = aws_vpc.hub.id
-  cidr_block        = "10.0.0.0/24"
-  availability_zone = "${var.aws_region}a"
-  tags              = { Name = "Hub-Public-Subnet-A" }
+  vpc_id                  = aws_vpc.hub.id
+  cidr_block              = "10.0.0.0/24"
+  availability_zone       = "${var.aws_region}a"
+  map_public_ip_on_launch = true
+  tags                    = { Name = "Hub-Public-Subnet-A" }
 }
 
 resource "aws_subnet" "public_b" {
-  vpc_id            = aws_vpc.hub.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "${var.aws_region}b"
-  tags              = { Name = "Hub-Public-Subnet-B" }
+  vpc_id                  = aws_vpc.hub.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "${var.aws_region}b"
+  map_public_ip_on_launch = true
+  tags                    = { Name = "Hub-Public-Subnet-B" }
 }
 
 # 2. Create a Route Table directing traffic to the Internet Gateway
