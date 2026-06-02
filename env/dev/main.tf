@@ -45,15 +45,15 @@ module "secrets-manager" {
 }
 
 module "backend_storage" {
-    source = "../../modules/backend-storage"
-    bucket_name = "dev-terraform-state-bucket"
+  source = "../../modules/backend-storage"
+  # Removed the bucket_name = "dev-terraform-state-bucket" override line!
 }
-# Find your module "eks" block and update the subnet input parameter:
+
 module "eks" {
   source           = "../../modules/eks"
   eks_cluster_name = "skillslab-ticketing-cluster-dev"
   
-  # Changes private_subnet_id to private_subnet_ids (plural)
+  # Pointing to Hub subnets
   private_subnet_ids = module.hub.public_subnet_ids 
 
   depends_on = [module.hub]
