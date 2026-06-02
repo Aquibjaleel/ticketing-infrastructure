@@ -18,9 +18,9 @@ phases:
       - sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
       - sudo yum install -y terraform-${TF_VERSION}
       
-      # 2. Install Trivy (Using official Linux RPM binary)
+      # 2. Install Trivy (Using the official automated shell installer)
       - echo "Installing Aquasecurity Trivy..."
-      - rpm -ivh https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.rpm
+      - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
       
       # 3. Install Snyk CLI (Using NodeJS/NPM globally or standalone binary)
       - echo "Installing Snyk CLI..."
