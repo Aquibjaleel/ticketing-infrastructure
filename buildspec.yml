@@ -46,7 +46,7 @@ phases:
       # Step C: Run Snyk (Authenticated via secure environment token)
       - echo "Invoking Snyk Security scan..."
       - snyk auth $SNYK_TOKEN
-      - snyk iac test . --severity-threshold=high || true
+      - snyk iac test . --severity-threshold=high --report || true
 
   build:
     commands:
