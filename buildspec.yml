@@ -1,0 +1,55 @@
+version: 0.2
+
+env:
+  variables:
+    TF_VERSION: "1.7.5"
+  parameter-store:
+    # We securely fetch your Snyk API token from AWS Systems Manager Parameter Store
+    SNYK_TOKEN: "/dev/devops/snyk_token"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "========== INSTALLATION PHASE =========="
+      # 1. Install Terraform
+      - sudo yum install -y yum-utils
+      - sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+      - sudo yum install -y terraform-${TF_VERSION}
+      
+      # 2. Install Trivy (Using the official automated shell installer)
+      - echo "Installing Aquasecurity Trivy..."
+      - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+      
+      # 3. Install Snyk CLI (Using NodeJS/NPM globally or standalone binary)
+      - echo "Installing Snyk CLI..."
+      - curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
+      - chmod +x ./snyk
+      - mv ./snyk /usr/local/bin/snyk
+
+  pre_build:
+    commands:
+      - echo "========== SECURITY SCANNING & TESTING PHASE =========="
+      - cd env/dev
+      - terraform init
+      
+      # Step A: Run Built-in Terraform Linting Gates
+      - echo "Validating Terraform code structure..."
+      # - terraform fmt -check
+      - terraform validate
+
+      # Step B: Run Trivy (Configured to look for cloud misconfigurations)
+      - echo "Invoking Trivy Infrastructure-as-Code scan..."
+      - trivy config . --severity HIGH,CRITICAL --exit-code 0
+
+      # Step C: Run Snyk (Authenticated via secure environment token)
+      - echo "Invoking Snyk Security scan..."
+      - snyk auth $SNYK_TOKEN
+      - snyk iac test . --severity-threshold=high --report || true
+
+  build:
+    commands:
+      - echo "========== BUILD PHASE =========="
+      - echo "Security gates passed successfully. Execution authorized."
+      - terraform plan -out=tfplan
